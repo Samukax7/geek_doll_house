@@ -1,6 +1,27 @@
 extends Node2D
 
 var recipe: Dictionary = {}
+var eye_state := 0
+
+func _ready() -> void:
+	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_blink_loop()
+
+func _blink_loop() -> void:
+	while is_inside_tree():
+		await get_tree().create_timer(randf_range(2.4, 5.2)).timeout
+		if not is_inside_tree(): return
+		eye_state = 1
+		queue_redraw()
+		await get_tree().create_timer(0.07).timeout
+		eye_state = 2
+		queue_redraw()
+		await get_tree().create_timer(0.09).timeout
+		eye_state = 1
+		queue_redraw()
+		await get_tree().create_timer(0.06).timeout
+		eye_state = 0
+		queue_redraw()
 
 func apply_recipe(new_recipe: Dictionary) -> void:
 	recipe = new_recipe.duplicate(true)
@@ -37,14 +58,16 @@ func _draw_custom_recipe() -> bool:
 	var torso_number := int(recipe.get("torso", 0)) + 1
 	var eyes_number := int(recipe.get("eyes", 0)) + 1
 	var hair_number := int(recipe.get("hair", 0)) + 1
+	var eye_folder := "res://assets/avatar/eyes/eye_%02d" % eyes_number
+	var sclera_state: String = ["sclera_open.png", "sclera_half.png", "sclera_closed.png"][eye_state]
 	var core := [
 		"res://assets/avatar/heads/head_%02d.png" % head_number,
 		"res://assets/avatar/arms/arms_%02d.png" % arms_number,
 		"res://assets/avatar/legs/legs_%02d.png" % legs_number,
 		"res://assets/avatar/torsos/torso_%02d.png" % torso_number,
-		"res://assets/avatar/eyes/eye_%02d/sclera.png" % eyes_number,
-		"res://assets/avatar/eyes/eye_%02d/iris.png" % eyes_number,
-		"res://assets/avatar/eyes/eye_%02d/pupil.png" % eyes_number,
+		eye_folder + "/" + sclera_state,
+		eye_folder + "/iris.png",
+		eye_folder + "/pupil.png",
 		"res://assets/avatar/hair/hair_%02d_back.png" % hair_number,
 		"res://assets/avatar/hair/hair_%02d_front.png" % hair_number
 	]
@@ -59,13 +82,18 @@ func _draw_custom_recipe() -> bool:
 	_draw_part(core[3], skin)
 	_draw_part(core[1], skin)
 	_draw_part(core[0], skin)
+	var underwear_path := "res://assets/avatar/base/underwear_01.png"
+	if ResourceLoader.exists(underwear_path): _draw_part(underwear_path, Color.WHITE)
 	_draw_part(core[4], Color.WHITE)
-	_draw_part(core[5], eyes)
-	_draw_part(core[6], Color("#222222"))
+	if eye_state == 0:
+		_draw_part(core[5], eyes)
+		_draw_part(core[6], Color("#222222"))
+	var mouth_path := "res://assets/avatar/mouth/mouth_01_closed.png"
+	if ResourceLoader.exists(mouth_path): _draw_part(mouth_path, Color.WHITE)
 	var outfit_category := str(recipe.get("outfit_category", "blouses"))
 	var outfit_path := "res://assets/avatar/clothing/%s/%s_%02d.png" % [outfit_category, _file_stem(outfit_category), int(recipe.get("outfit", 0)) + 1]
 	if ResourceLoader.exists(outfit_path): _draw_part(outfit_path, clothes)
-	if outfit_category != "dresses":
+	if outfit_category != "dresses" and outfit_category != "sets":
 		var lower_category := str(recipe.get("lower_category", "skirts"))
 		var lower_path := "res://assets/avatar/clothing/%s/%s_%02d.png" % [lower_category, _file_stem(lower_category), int(recipe.get("lower", 0)) + 1]
 		if ResourceLoader.exists(lower_path): _draw_part(lower_path, clothes)
@@ -79,7 +107,7 @@ func _draw_part(path: String, tint: Color) -> void:
 	if texture: draw_texture_rect(texture, Rect2(-128, -256, 256, 256), false, tint)
 
 func _file_stem(category: String) -> String:
-	return {"blouses":"blouse", "dresses":"dress", "pants":"pant", "skirts":"skirt", "shorts":"short"}.get(category, category)
+	return {"blouses":"blouse", "dresses":"dress", "sets":"set", "pants":"pant", "skirts":"skirt", "shorts":"short"}.get(category, category)
 
 func _draw_ellipse(center: Vector2, radius: Vector2, color: Color) -> void:
 	var points := PackedVector2Array()

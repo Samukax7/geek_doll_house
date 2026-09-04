@@ -155,7 +155,7 @@ func _build_avatar_editor() -> void:
 	_add_selector("Tronco", "torso", 3, true)
 	_add_selector("Olhos", "eyes", 4, true)
 	_add_selector("Cabelo", "hair", 3, true)
-	_add_category_selector("Tipo superior", "outfit_category", ["blouses", "dresses"], ["Blusa", "Vestido"])
+	_add_category_selector("Tipo superior", "outfit_category", ["blouses", "dresses", "sets"], ["Blusa", "Vestido", "Conjunto"])
 	_add_selector("Modelo superior", "outfit", 3, false)
 	_add_category_selector("Tipo inferior", "lower_category", ["pants", "skirts", "shorts"], ["Calça", "Saia", "Short"])
 	_add_selector("Parte inferior", "lower", 3, false)
@@ -198,7 +198,7 @@ func _refresh_avatar_editor() -> void:
 		var selector := avatar_options.find_child("selector_" + key, true, false) as OptionButton
 		if selector: selector.select(int(editing_avatar.get(key, 0)))
 	var upper := avatar_options.find_child("category_outfit_category", true, false) as OptionButton
-	if upper: upper.select(["blouses", "dresses"].find(str(editing_avatar.get("outfit_category", "blouses"))))
+	if upper: upper.select(["blouses", "dresses", "sets"].find(str(editing_avatar.get("outfit_category", "blouses"))))
 	var lower := avatar_options.find_child("category_lower_category", true, false) as OptionButton
 	if lower: lower.select(["pants", "skirts", "shorts"].find(str(editing_avatar.get("lower_category", "skirts"))))
 	for key in ["skin_color", "eye_color", "hair_color", "clothing_color"]:

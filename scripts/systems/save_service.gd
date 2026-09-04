@@ -17,7 +17,7 @@ func _default_data() -> Dictionary:
 		"avatar": {
 			"head": 0, "arms": 0, "legs": 0, "torso": 0, "eyes": 0, "hair": 0,
 			"skin_color": "#d8b6a4", "eye_color": "#55445f", "hair_color": "#4b3c55",
-			"clothing_color": "#b58ac5", "outfit_category": "blouses", "outfit": 0,
+			"clothing_color": "#b58ac5", "outfit_category": "sets", "outfit": 0,
 			"lower_category": "skirts", "lower": 0, "shoes": 0
 		}
 	}

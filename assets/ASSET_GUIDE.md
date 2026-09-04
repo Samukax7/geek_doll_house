@@ -4,7 +4,7 @@ Todos os PNGs devem ser exportados em escala de cinza, com fundo transparente e 
 
 ## Avatar
 
-- Canvas obrigatório: `256 x 256 px` para **todas** as peças.
+- Canvas obrigatório: `128 x 128 px` para **todas** as peças.
 - Fundo transparente.
 - Personagem centralizado e com o mesmo pivô em todos os arquivos.
 - Não corte partes nas bordas. Não mude o tamanho do canvas entre opções.
@@ -26,6 +26,7 @@ assets/avatar/
 │   └── eye_04/sclera.png, iris.png, pupil.png
 ├── hair/hair_01_back.png + hair_01_front.png (até 03)
 └── clothing/
+	├── sets/set_01.png ... set_03.png
     ├── blouses/blouse_01.png ... blouse_03.png
     ├── pants/pant_01.png ... pant_03.png
     ├── dresses/dress_01.png ... dress_03.png
@@ -46,9 +47,9 @@ Cabeça, braços, pernas, tronco, olhos, cabelo e suas cores são permanentes ap
 
 | Cômodo | x | y | largura | altura |
 |---|---:|---:|---:|---:|
-| Quarto | 60 | 120 | 600 | 245 |
-| Sala | 60 | 395 | 600 | 245 |
-| Estúdio | 60 | 670 | 600 | 245 |
+| Quarto | 58 | 145 | 452 | 210 |
+| Sala | 58 | 410 | 452 | 210 |
+| Estúdio | 58 | 675 | 452 | 210 |
 
 Se a arquitetura final mudar, atualize `ROOM_RECTS` em `scripts/world/house_view.gd`.
 
